@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Review thread",
+  "description": "A versioned workspace review thread. Unknown JSON-compatible properties are preserved for forward extensibility. Application validation additionally requires ordered ranges, real calendar dates, and distinct comment IDs.",
+  "type": "object",
+  "required": ["schemaVersion", "kind", "id", "revision", "resource", "anchor", "status", "comments", "tags", "createdAt", "updatedAt", "metadata"],
+  "additionalProperties": true,
+  "properties": {
+    "schemaVersion": { "const": 1, "description": "Only version 1 is supported. Other versions must not be rewritten." },
+    "kind": { "const": "review-thread" },
+    "id": { "$ref": "#/definitions/uuid" },
+    "revision": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991,
+      "description": "Optimistic concurrency revision. New unsaved threads use 0; the first save commits 1, and each successful save increments by one. Saves and deletes must compare the expected revision under an exclusive lock."
+    },
+    "resource": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "allOf": [
+            { "pattern": "\\S" },
+            { "pattern": "^[^/\\\\:\\u0000-\\u001f\\u007f]+(?:/[^/\\\\:\\u0000-\\u001f\\u007f]+)*$(?![\\s\\S])" },
+            { "not": { "pattern": "(^|/)\\.{1,2}(/|$)" } }
+          ],
+          "description": "A confined workspace-relative POSIX path. Spaces and Unicode are supported. Absolute paths, drive syntax, colons, backslashes, control characters, empty segments, and dot or dot-dot segments are forbidden."
+        }
+      }
+    },
+    "anchor": { "oneOf": [{ "$ref": "#/definitions/fileAnchor" }, { "$ref": "#/definitions/textAnchor" }] },
+    "status": { "enum": ["open", "resolved"] },
+    "comments": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/comment" },
+      "description": "The initial comment and every reply in conversation order. Comment IDs must be unique within the thread; the application checks this constraint."
+    },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "createdAt": { "$ref": "#/definitions/timestamp" },
+    "updatedAt": { "$ref": "#/definitions/timestamp" },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Reserved extensibility space for JSON-compatible integration metadata. Readers preserve unknown metadata and other unknown properties."
+    }
+  },
+  "definitions": {
+    "uuid": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$(?![\\s\\S])",
+      "description": "A UUID with version 1 through 8 and the standard variant. Storage uses the lowercase UUID followed by .json as the canonical safe filename."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](?:\\.[0-9]+)?(?:Z|[+-]([01][0-9]|2[0-3]):[0-5][0-9])$(?![\\s\\S])",
+      "description": "An RFC 3339 timestamp with uppercase T and Z and no leap-second notation; application validation also checks calendar dates."
+    },
+    "position": {
+      "type": "object",
+      "required": ["line", "character"],
+      "additionalProperties": true,
+      "description": "A zero-based line and zero-based UTF-16 code-unit offset within that line; line terminators are not part of the character count.",
+      "properties": {
+        "line": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "character": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      }
+    },
+    "fileAnchor": {
+      "type": "object",
+      "required": ["kind"],
+      "additionalProperties": true,
+      "properties": { "kind": { "const": "file" } }
+    },
+    "textAnchor": {
+      "type": "object",
+      "required": ["kind", "range", "snapshot", "before", "after", "stale"],
+      "additionalProperties": true,
+      "properties": {
+        "kind": { "const": "text" },
+        "range": {
+          "type": "object",
+          "required": ["start", "end"],
+          "additionalProperties": true,
+          "description": "Zero-based UTF-16 range with an exclusive end. End must not precede start; this cross-field constraint is checked by the application. An empty range can anchor an empty line.",
+          "properties": {
+            "start": { "$ref": "#/definitions/position" },
+            "end": { "$ref": "#/definitions/position" }
+          }
+        },
+        "snapshot": { "type": "string", "description": "Exact source excerpt, including line endings, captured when the thread was created or explicitly reattached. Automatic relocation does not replace it." },
+        "before": { "type": "string", "description": "Original context immediately before the excerpt, used for conservative relocation." },
+        "after": { "type": "string", "description": "Original context immediately after the excerpt, used for conservative relocation." },
+        "stale": { "type": "boolean", "description": "True when the saved source selection cannot be matched unambiguously or the current source cannot be verified. Check the current file before relying on this range." }
+      }
+    },
+    "comment": {
+      "type": "object",
+      "required": ["id", "body", "author", "createdAt", "updatedAt"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "$ref": "#/definitions/uuid" },
+        "body": { "type": "string", "pattern": "\\S", "description": "Nonblank plain text with no arbitrary length limit." },
+        "author": { "type": "string", "pattern": "\\S" },
+        "createdAt": { "$ref": "#/definitions/timestamp" },
+        "updatedAt": { "$ref": "#/definitions/timestamp" }
+      }
+    }
+  }
+}

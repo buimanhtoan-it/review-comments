@@ -1,0 +1,809 @@
+{
+  "name": "review-comments",
+  "displayName": "Review Comments",
+  "icon": "media/logo.png",
+  "description": "Add review comments to code and documents without changing the source. Track feedback and copy it with context.",
+  "version": "1.0.1",
+  "publisher": "ToanBui",
+  "author": {
+    "name": "ToanBui",
+    "email": "buimanhtoan.it@gmail.com"
+  },
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/buimanhtoan-it/review-comments.git"
+  },
+  "homepage": "https://github.com/buimanhtoan-it/review-comments#readme",
+  "bugs": {
+    "url": "https://github.com/buimanhtoan-it/review-comments/issues"
+  },
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "review",
+    "comments",
+    "annotations",
+    "notes",
+    "code review",
+    "markdown",
+    "documents",
+    "latex"
+  ],
+  "main": "./dist/extension.js",
+  "extensionKind": [
+    "workspace"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": {
+      "supported": false,
+      "description": "Review storage requires a local or remote filesystem workspace."
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p tsconfig.json",
+    "watch": "tsc -p tsconfig.json --watch",
+    "test": "tsc -p tsconfig.test.json && node --test build/test/*.test.js",
+    "test:integration": "npm run compile && tsc -p tsconfig.test.json && node test/run-extension.cjs",
+    "vscode:prepublish": "npm run compile",
+    "package": "vsce package",
+    "publish:marketplace": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.30",
+    "@types/vscode": "1.96.0",
+    "@vscode/test-electron": "2.5.2",
+    "@vscode/vsce": "4.0.0",
+    "typescript": "5.8.3"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "reviewComments.add",
+        "title": "Add Comment",
+        "category": "Review Comments",
+        "icon": "$(comment-add)"
+      },
+      {
+        "command": "reviewComments.addFile",
+        "title": "Add File Comment",
+        "category": "Review Comments",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "reviewComments.copy",
+        "title": "Copy Thread",
+        "category": "Review Comments",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "reviewComments.copyAll",
+        "title": "Copy All Comments",
+        "category": "Review Comments",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "reviewComments.copyOpen",
+        "title": "Copy Open Comments",
+        "category": "Review Comments",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "reviewComments.copyFile",
+        "title": "Copy All Comments in This File",
+        "category": "Review Comments"
+      },
+      {
+        "command": "reviewComments.copyFileOpen",
+        "title": "Copy Open Comments in This File",
+        "category": "Review Comments",
+        "icon": "$(file)"
+      },
+      {
+        "command": "reviewComments.copyFileResolved",
+        "title": "Copy Resolved Comments in This File",
+        "category": "Review Comments",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "reviewComments.copyFileJson",
+        "title": "Copy All Comments in This File as JSON",
+        "category": "Review Comments",
+        "icon": "$(json)"
+      },
+      {
+        "command": "reviewComments.openFile",
+        "title": "Open Source File",
+        "category": "Review Comments",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "reviewComments.quickActions",
+        "title": "Review Actions…",
+        "category": "Review Comments",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "reviewComments.copyJson",
+        "title": "Copy All Comments as JSON",
+        "category": "Review Comments"
+      },
+      {
+        "command": "reviewComments.export",
+        "title": "Export Comments…",
+        "category": "Review Comments",
+        "icon": "$(export)"
+      },
+      {
+        "command": "reviewComments.resolve",
+        "title": "Resolve",
+        "category": "Review Comments",
+        "icon": "$(check)"
+      },
+      {
+        "command": "reviewComments.reopen",
+        "title": "Reopen",
+        "category": "Review Comments",
+        "icon": "$(debug-restart)"
+      },
+      {
+        "command": "reviewComments.delete",
+        "title": "Delete Thread",
+        "category": "Review Comments",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "reviewComments.clearResolved",
+        "title": "Delete Resolved Threads…",
+        "category": "Review Comments"
+      },
+      {
+        "command": "reviewComments.filter",
+        "title": "Filter Comments…",
+        "category": "Review Comments",
+        "icon": "$(filter)"
+      },
+      {
+        "command": "reviewComments.search",
+        "title": "Search Comments…",
+        "category": "Review Comments",
+        "icon": "$(search)"
+      },
+      {
+        "command": "reviewComments.clearFilters",
+        "title": "Clear Filters",
+        "category": "Review Comments",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "reviewComments.refresh",
+        "title": "Refresh",
+        "category": "Review Comments",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "reviewComments.openStorage",
+        "title": "Open Comment Storage",
+        "category": "Review Comments",
+        "icon": "$(database)"
+      },
+      {
+        "command": "reviewComments.show",
+        "title": "Go to Source",
+        "category": "Review Comments",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "reviewComments.preview",
+        "title": "Quick Preview",
+        "category": "Review Comments",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "reviewComments.collapseInline",
+        "title": "Collapse Inline Comments",
+        "category": "Review Comments",
+        "icon": "$(collapse-all)"
+      },
+      {
+        "command": "reviewComments.nextOpen",
+        "title": "Next Open Comment",
+        "category": "Review Comments",
+        "icon": "$(arrow-down)"
+      },
+      {
+        "command": "reviewComments.previousOpen",
+        "title": "Previous Open Comment",
+        "category": "Review Comments",
+        "icon": "$(arrow-up)"
+      },
+      {
+        "command": "reviewComments.reanchor",
+        "title": "Attach to Current Selection…",
+        "category": "Review Comments",
+        "icon": "$(link)"
+      },
+      {
+        "command": "reviewComments.submit",
+        "title": "Save Comment",
+        "category": "Review Comments"
+      },
+      {
+        "command": "reviewComments.replyResolve",
+        "title": "Reply & Resolve",
+        "category": "Review Comments"
+      },
+      {
+        "command": "reviewComments.replyReopen",
+        "title": "Reply & Reopen",
+        "category": "Review Comments"
+      },
+      {
+        "command": "reviewComments.cancel",
+        "title": "Cancel",
+        "category": "Review Comments"
+      },
+      {
+        "command": "reviewComments.edit",
+        "title": "Edit Comment",
+        "category": "Review Comments",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "reviewComments.saveEdit",
+        "title": "Save",
+        "category": "Review Comments"
+      },
+      {
+        "command": "reviewComments.cancelEdit",
+        "title": "Cancel",
+        "category": "Review Comments"
+      },
+      {
+        "command": "reviewComments.deleteComment",
+        "title": "Delete Comment",
+        "category": "Review Comments",
+        "icon": "$(trash)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "reviewComments",
+          "title": "Review Comments",
+          "icon": "media/logo-activity.png"
+        }
+      ]
+    },
+    "views": {
+      "reviewComments": [
+        {
+          "id": "reviewComments.list",
+          "name": "Comments"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "reviewComments.list",
+        "contents": "Leave feedback without changing your files. Open a folder and select text in a saved file to get started.\n[Add Comment](command:reviewComments.add)\nCtrl+Alt+M (macOS: Cmd+Alt+M) adds a comment. Ctrl+Enter (macOS: Cmd+Enter) saves it; Enter adds a new line.\n\nFor a whole-file note, right-click a file in the Explorer and choose Add File Comment. PDF and image comments do not mark pages or regions.\n[Add File Comment](command:reviewComments.addFile)\n\nSaved comments are stored in .review-comments/threads. If filters hide your comments, clear them to see all threads.\n[Clear Filters](command:reviewComments.clearFilters)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "reviewComments.add",
+        "key": "ctrl+alt+m",
+        "mac": "cmd+alt+m",
+        "when": "editorTextFocus && !commentEditorFocused && (resourceScheme == file || resourceScheme == vscode-remote)"
+      },
+      {
+        "command": "reviewComments.copyOpen",
+        "key": "ctrl+alt+c",
+        "mac": "cmd+alt+c",
+        "when": "(editorTextFocus && !commentEditorFocused && (resourceScheme == file || resourceScheme == vscode-remote)) || focusedView == reviewComments.list"
+      },
+      {
+        "command": "reviewComments.nextOpen",
+        "key": "alt+f8",
+        "when": "editorTextFocus || focusedView == reviewComments.list"
+      },
+      {
+        "command": "reviewComments.previousOpen",
+        "key": "shift+alt+f8",
+        "when": "editorTextFocus || focusedView == reviewComments.list"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "reviewComments.copyOpen",
+          "when": "reviewComments.hasOpen && (resourceScheme == file || resourceScheme == vscode-remote) && config.reviewComments.titleButtons",
+          "group": "navigation@90"
+        },
+        {
+          "command": "reviewComments.quickActions",
+          "when": "reviewComments.hasThreads && (resourceScheme == file || resourceScheme == vscode-remote) && config.reviewComments.titleButtons",
+          "group": "navigation@91"
+        },
+        {
+          "command": "reviewComments.copyAll",
+          "when": "reviewComments.hasThreads",
+          "group": "reviewComments@1"
+        },
+        {
+          "command": "reviewComments.copyFileOpen",
+          "when": "reviewComments.hasOpen && (resourceScheme == file || resourceScheme == vscode-remote)",
+          "group": "reviewComments@2"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "reviewComments.copyFileOpen",
+          "when": "reviewComments.hasOpen",
+          "group": "reviewComments@1"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "reviewComments.add",
+          "when": "resourceScheme == file || resourceScheme == vscode-remote",
+          "group": "reviewComments@1"
+        },
+        {
+          "command": "reviewComments.addFile",
+          "when": "resourceScheme == file || resourceScheme == vscode-remote",
+          "group": "reviewComments@2"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "reviewComments.addFile",
+          "when": "!explorerResourceIsFolder && (resourceScheme == file || resourceScheme == vscode-remote)",
+          "group": "reviewComments@1"
+        },
+        {
+          "command": "reviewComments.copyFile",
+          "when": "!explorerResourceIsFolder",
+          "group": "reviewComments@2"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "reviewComments.addFile",
+          "when": "view == reviewComments.list",
+          "group": "navigation@1"
+        },
+        {
+          "command": "reviewComments.copyAll",
+          "when": "view == reviewComments.list",
+          "group": "navigation@2"
+        },
+        {
+          "command": "reviewComments.filter",
+          "when": "view == reviewComments.list",
+          "group": "navigation@3"
+        },
+        {
+          "command": "reviewComments.search",
+          "when": "view == reviewComments.list",
+          "group": "navigation@4"
+        },
+        {
+          "command": "reviewComments.collapseInline",
+          "when": "view == reviewComments.list"
+        },
+        {
+          "command": "reviewComments.clearFilters",
+          "when": "view == reviewComments.list"
+        },
+        {
+          "command": "reviewComments.refresh",
+          "when": "view == reviewComments.list"
+        },
+        {
+          "command": "reviewComments.copyOpen",
+          "when": "view == reviewComments.list",
+          "group": "navigation@2.5"
+        },
+        {
+          "command": "reviewComments.nextOpen",
+          "when": "view == reviewComments.list"
+        },
+        {
+          "command": "reviewComments.previousOpen",
+          "when": "view == reviewComments.list"
+        },
+        {
+          "command": "reviewComments.copyJson",
+          "when": "view == reviewComments.list"
+        },
+        {
+          "command": "reviewComments.export",
+          "when": "view == reviewComments.list"
+        },
+        {
+          "command": "reviewComments.clearResolved",
+          "when": "view == reviewComments.list"
+        },
+        {
+          "command": "reviewComments.openStorage",
+          "when": "view == reviewComments.list"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "reviewComments.copyFile",
+          "when": "view == reviewComments.list && viewItem == reviewFile",
+          "group": "1_copy@1"
+        },
+        {
+          "command": "reviewComments.copyFileOpen",
+          "when": "view == reviewComments.list && viewItem == reviewFile",
+          "group": "1_copy@2"
+        },
+        {
+          "command": "reviewComments.copyFileResolved",
+          "when": "view == reviewComments.list && viewItem == reviewFile",
+          "group": "1_copy@3"
+        },
+        {
+          "command": "reviewComments.copyFileJson",
+          "when": "view == reviewComments.list && viewItem == reviewFile",
+          "group": "1_copy@4"
+        },
+        {
+          "command": "reviewComments.openFile",
+          "when": "view == reviewComments.list && viewItem == reviewFile",
+          "group": "2_file@1"
+        },
+        {
+          "command": "reviewComments.addFile",
+          "when": "view == reviewComments.list && viewItem == reviewFile",
+          "group": "2_file@2"
+        },
+        {
+          "command": "reviewComments.copy",
+          "when": "view == reviewComments.list && viewItem =~ /^reviewThread/",
+          "group": "inline@1"
+        },
+        {
+          "command": "reviewComments.resolve",
+          "when": "view == reviewComments.list && viewItem == reviewThread.open",
+          "group": "inline@2"
+        },
+        {
+          "command": "reviewComments.reopen",
+          "when": "view == reviewComments.list && viewItem == reviewThread.resolved",
+          "group": "inline@2"
+        },
+        {
+          "command": "reviewComments.show",
+          "when": "view == reviewComments.list && viewItem =~ /^reviewThread/",
+          "group": "inline@3"
+        },
+        {
+          "command": "reviewComments.preview",
+          "when": "view == reviewComments.list && viewItem =~ /^reviewThread/",
+          "group": "review@1"
+        },
+        {
+          "command": "reviewComments.reanchor",
+          "when": "view == reviewComments.list && viewItem =~ /^reviewThread/",
+          "group": "review@2"
+        },
+        {
+          "command": "reviewComments.delete",
+          "when": "view == reviewComments.list && viewItem =~ /^reviewThread/",
+          "group": "review@3"
+        }
+      ],
+      "comments/commentThread/context": [
+        {
+          "command": "reviewComments.submit",
+          "when": "commentController == reviewComments",
+          "group": "inline@1"
+        },
+        {
+          "command": "reviewComments.replyResolve",
+          "when": "commentController == reviewComments && commentThread == reviewComments.open",
+          "group": "inline@2"
+        },
+        {
+          "command": "reviewComments.replyReopen",
+          "when": "commentController == reviewComments && commentThread == reviewComments.resolved",
+          "group": "inline@2"
+        },
+        {
+          "command": "reviewComments.cancel",
+          "when": "commentController == reviewComments && (!commentThread || commentThread == reviewComments.draft)",
+          "group": "inline@2"
+        }
+      ],
+      "comments/commentThread/title": [
+        {
+          "command": "reviewComments.preview",
+          "when": "commentController == reviewComments && commentThread =~ /^reviewComments\\.(open|resolved)$/",
+          "group": "navigation@0"
+        },
+        {
+          "command": "reviewComments.copy",
+          "when": "commentController == reviewComments && commentThread =~ /^reviewComments\\.(open|resolved)$/",
+          "group": "navigation@1"
+        },
+        {
+          "command": "reviewComments.resolve",
+          "when": "commentController == reviewComments && commentThread == reviewComments.open",
+          "group": "navigation@2"
+        },
+        {
+          "command": "reviewComments.reopen",
+          "when": "commentController == reviewComments && commentThread == reviewComments.resolved",
+          "group": "navigation@2"
+        },
+        {
+          "command": "reviewComments.delete",
+          "when": "commentController == reviewComments && commentThread =~ /^reviewComments\\.(open|resolved)$/",
+          "group": "navigation@3"
+        }
+      ],
+      "comments/comment/title": [
+        {
+          "command": "reviewComments.edit",
+          "when": "commentController == reviewComments && comment == reviewComments.comment",
+          "group": "inline@1"
+        },
+        {
+          "command": "reviewComments.deleteComment",
+          "when": "commentController == reviewComments && comment == reviewComments.comment",
+          "group": "inline@2"
+        }
+      ],
+      "comments/comment/actions": [
+        {
+          "command": "reviewComments.saveEdit",
+          "when": "commentController == reviewComments && comment == reviewComments.comment",
+          "group": "inline@1"
+        },
+        {
+          "command": "reviewComments.cancelEdit",
+          "when": "commentController == reviewComments && comment == reviewComments.comment",
+          "group": "inline@2"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "reviewComments.submit",
+          "when": "false"
+        },
+        {
+          "command": "reviewComments.replyResolve",
+          "when": "false"
+        },
+        {
+          "command": "reviewComments.replyReopen",
+          "when": "false"
+        },
+        {
+          "command": "reviewComments.cancel",
+          "when": "false"
+        },
+        {
+          "command": "reviewComments.edit",
+          "when": "false"
+        },
+        {
+          "command": "reviewComments.saveEdit",
+          "when": "false"
+        },
+        {
+          "command": "reviewComments.cancelEdit",
+          "when": "false"
+        },
+        {
+          "command": "reviewComments.deleteComment",
+          "when": "false"
+        }
+      ]
+    },
+    "colors": [
+      {
+        "id": "reviewComments.openBorder",
+        "description": "Border around unresolved commented text.",
+        "defaults": {
+          "dark": "#E2B93B",
+          "light": "#B58900",
+          "highContrast": "#FFD700",
+          "highContrastLight": "#8A6500"
+        }
+      },
+      {
+        "id": "reviewComments.openBackground",
+        "description": "Background of unresolved commented text.",
+        "defaults": {
+          "dark": "#E2B93B1F",
+          "light": "#F2C94C33",
+          "highContrast": "#00000000",
+          "highContrastLight": "#00000000"
+        }
+      },
+      {
+        "id": "reviewComments.activeBorder",
+        "description": "Border of the comment at the cursor or opened from the list.",
+        "defaults": {
+          "dark": "#FF8C42",
+          "light": "#D9480F",
+          "highContrast": "#FF9E3D",
+          "highContrastLight": "#B33A00"
+        }
+      },
+      {
+        "id": "reviewComments.activeBackground",
+        "description": "Background of the comment at the cursor or opened from the list.",
+        "defaults": {
+          "dark": "#FF8C4238",
+          "light": "#FF8C4230",
+          "highContrast": "#00000000",
+          "highContrastLight": "#00000000"
+        }
+      },
+      {
+        "id": "reviewComments.activeLineBackground",
+        "description": "Whole-line background of the active comment.",
+        "defaults": {
+          "dark": "#FF8C4214",
+          "light": "#FF8C4214",
+          "highContrast": "#00000000",
+          "highContrastLight": "#00000000"
+        }
+      },
+      {
+        "id": "reviewComments.resolvedBorder",
+        "description": "Dashed border around resolved commented text.",
+        "defaults": {
+          "dark": "#73C991AA",
+          "light": "#2E7D32AA",
+          "highContrast": "#73C991",
+          "highContrastLight": "#1B5E20"
+        }
+      },
+      {
+        "id": "reviewComments.staleBorder",
+        "description": "Dotted border for comments whose saved source location could not be verified.",
+        "defaults": {
+          "dark": "#F14C4C",
+          "light": "#C62828",
+          "highContrast": "#F48771",
+          "highContrastLight": "#B71C1C"
+        }
+      },
+      {
+        "id": "reviewComments.overviewRuler.open",
+        "description": "Scrollbar marker for unresolved comments.",
+        "defaults": {
+          "dark": "#E2B93BDD",
+          "light": "#B58900DD",
+          "highContrast": "#FFD700",
+          "highContrastLight": "#8A6500"
+        }
+      },
+      {
+        "id": "reviewComments.overviewRuler.active",
+        "description": "Scrollbar marker for the active comment.",
+        "defaults": {
+          "dark": "#FF8C42",
+          "light": "#D9480F",
+          "highContrast": "#FF9E3D",
+          "highContrastLight": "#B33A00"
+        }
+      },
+      {
+        "id": "reviewComments.overviewRuler.resolved",
+        "description": "Scrollbar marker for resolved comments.",
+        "defaults": {
+          "dark": "#73C99188",
+          "light": "#2E7D3288",
+          "highContrast": "#73C991",
+          "highContrastLight": "#1B5E20"
+        }
+      },
+      {
+        "id": "reviewComments.overviewRuler.stale",
+        "description": "Scrollbar marker for comments whose saved source location could not be verified.",
+        "defaults": {
+          "dark": "#F14C4CDD",
+          "light": "#C62828DD",
+          "highContrast": "#F48771",
+          "highContrastLight": "#B71C1C"
+        }
+      }
+    ],
+    "configuration": {
+      "title": "Review Comments",
+      "properties": {
+        "reviewComments.sidebarClickAction": {
+          "type": "string",
+          "enum": [
+            "preview",
+            "source"
+          ],
+          "default": "preview",
+          "enumDescriptions": [
+            "Open a persistent, scrollable preview where text can be selected and copied.",
+            "Jump to the source and expand the inline thread."
+          ],
+          "description": "Action when clicking a comment in the sidebar. Quick Preview and Go to Source are always available in the context menu."
+        },
+        "reviewComments.toolbar": {
+          "type": "string",
+          "enum": [
+            "whenComments",
+            "always",
+            "off"
+          ],
+          "enumDescriptions": [
+            "Show the review action row at the top of files when the workspace has comments.",
+            "Always show the review action row at the top of workspace files.",
+            "Never show the review action row."
+          ],
+          "default": "whenComments",
+          "description": "Show review actions above the first line of workspace text files. Copy Open and Copy All apply to the whole workspace. Requires editor.codeLens to be enabled."
+        },
+        "reviewComments.titleButtons": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show Copy Open and Review Actions buttons in the editor title bar."
+        },
+        "reviewComments.statusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show open-thread counts in the status bar. When the active file has comments, show both its open count and the workspace total. Replies are not counted separately."
+        },
+        "reviewComments.highlights": {
+          "type": "boolean",
+          "default": true,
+          "description": "Outline commented text and show scrollbar markers. Colors can be customized under workbench.colorCustomizations (reviewComments.*)."
+        },
+        "reviewComments.highlightResolved": {
+          "type": "boolean",
+          "default": true,
+          "description": "Also outline resolved comments (dashed green)."
+        },
+        "reviewComments.copyNotifications": {
+          "type": "boolean",
+          "default": false,
+          "description": "Also show a notification after copying. The status bar always confirms successful copies."
+        },
+        "reviewComments.author": {
+          "type": "string",
+          "default": "Reviewer",
+          "description": "Name recorded on new comments and replies. Existing comments keep their original author name. This is a label, not a verified identity; no account is required."
+        },
+        "reviewComments.copyFormat": {
+          "type": "string",
+          "enum": [
+            "markdown",
+            "json"
+          ],
+          "default": "markdown",
+          "description": "Default format for Copy commands. Copy All Comments as JSON always uses JSON. Copy commands use their named scope, regardless of sidebar filters or search."
+        }
+      }
+    },
+    "jsonValidation": [
+      {
+        "fileMatch": "**/.review-comments/threads/*.json",
+        "url": "./schemas/thread.schema.json"
+      }
+    ]
+  }
+}

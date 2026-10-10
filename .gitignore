@@ -1,0 +1,17 @@
+node_modules/
+dist/
+build/
+*.vsix
+.vscode-test/
+.review-comments/
+.env
+.env.*
+!.env.example
+.npmrc
+*.log
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+!.vscode/
+!.vscode/launch.json
+!.vscode/tasks.json
