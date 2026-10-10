@@ -11,6 +11,9 @@ test('release metadata and local package instructions stay consistent', () => {
   const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
   assert.equal(manifest.publisher, 'ToanBui');
   assert.equal(manifest.name, 'toanbui-review-comments');
+  assert.equal(manifest.displayName, 'I Review Comments');
+  assert.equal(readme.split(/\r?\n/, 1)[0], `# ${manifest.displayName}`);
+  assert.ok(readme.includes(`install **${manifest.displayName}**`));
   assert.equal(lock.name, manifest.name);
   assert.equal(lock.packages[''].name, manifest.name);
   assert.equal(manifest.license, 'ISC');

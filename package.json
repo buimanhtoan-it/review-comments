@@ -1,6 +1,6 @@
 {
   "name": "toanbui-review-comments",
-  "displayName": "Review Comments",
+  "displayName": "I Review Comments",
   "icon": "media/logo.png",
   "description": "Add review comments to code and documents without changing the source. Track feedback and copy it with context.",
   "version": "1.0.1",

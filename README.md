@@ -1,4 +1,4 @@
-# Review Comments
+# I Review Comments
 
 **Review code and documents without changing the source.**
 
@@ -12,7 +12,7 @@ By **ToanBui** · [Source code](https://github.com/buimanhtoan-it/review-comment
 
 Requires **VS Code 1.96 or newer**. The extension ID is **`ToanBui.toanbui-review-comments`**.
 
-Once published, install **Review Comments** by **ToanBui** from the Extensions view, or run:
+Once published, install **I Review Comments** (publisher: **ToanBui**) from the Extensions view, or run:
 
 ```powershell
 code --install-extension ToanBui.toanbui-review-comments;
