@@ -10,7 +10,9 @@ test('release metadata and local package instructions stay consistent', () => {
   const lock = JSON.parse(fs.readFileSync(path.join(root, 'package-lock.json'), 'utf8'));
   const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
   assert.equal(manifest.publisher, 'ToanBui');
-  assert.equal(manifest.name, 'review-comments');
+  assert.equal(manifest.name, 'toanbui-review-comments');
+  assert.equal(lock.name, manifest.name);
+  assert.equal(lock.packages[''].name, manifest.name);
   assert.equal(manifest.license, 'ISC');
   assert.equal(lock.version, manifest.version);
   assert.equal(lock.packages[''].version, manifest.version);
@@ -18,7 +20,7 @@ test('release metadata and local package instructions stay consistent', () => {
   assert.equal(manifest.repository.url, 'https://github.com/buimanhtoan-it/review-comments.git');
   assert.ok(fs.existsSync(path.join(root, 'LICENSE')));
   assert.ok(readme.includes(`${manifest.publisher}.${manifest.name}`));
-  const packages = readme.match(/review-comments-\d+\.\d+\.\d+\.vsix/g) ?? [];
+  const packages = readme.match(/[a-z0-9-]+-\d+\.\d+\.\d+\.vsix/g) ?? [];
   assert.ok(packages.length > 0);
   assert.ok(packages.every(file => file === `${manifest.name}-${manifest.version}.vsix`));
 });

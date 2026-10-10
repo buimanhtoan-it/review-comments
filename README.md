@@ -10,15 +10,17 @@ By **ToanBui** · [Source code](https://github.com/buimanhtoan-it/review-comment
 
 ## Installation
 
-Requires **VS Code 1.96 or newer**. The extension ID is **`ToanBui.review-comments`**.
+Requires **VS Code 1.96 or newer**. The extension ID is **`ToanBui.toanbui-review-comments`**.
 
 Once published, install **Review Comments** by **ToanBui** from the Extensions view, or run:
 
 ```powershell
-code --install-extension ToanBui.review-comments;
+code --install-extension ToanBui.toanbui-review-comments;
 ```
 
-Before the Marketplace release, or to try a locally built version, run **Extensions: Install from VSIX…** in the Command Palette and select `review-comments-1.0.1.vsix`. Reload the editor if prompted.
+Before the Marketplace release, or to try a locally built version, run **Extensions: Install from VSIX…** in the Command Palette and select `toanbui-review-comments-1.0.1.vsix`. Reload the editor if prompted.
+
+If you installed an earlier local build with the ID `ToanBui.review-comments` or `local-tools.review-comments`, uninstall that build before installing this one, then reload the editor. These builds share command and sidebar IDs and should not run together. Uninstalling the extension does not remove saved threads in your workspace's `.review-comments/` directory.
 
 ## What you can do
 
@@ -196,7 +198,7 @@ npm test;
 npm run package;
 ```
 
-`npm run package` compiles the TypeScript source and creates `review-comments-1.0.1.vsix`. Only the manifest, README, license, compiled runtime, media, and JSON schemas are included. Source maps, tests, local review data, development settings, and credentials are not part of the package.
+`npm run package` compiles the TypeScript source and creates `toanbui-review-comments-1.0.1.vsix`. Only the manifest, README, license, compiled runtime, media, and JSON schemas are included. Source maps, tests, local review data, development settings, and credentials are not part of the package.
 
 Open this project in VS Code and press **F5** to launch an Extension Development Host. To run the integration suite in a disposable VS Code workspace:
 
@@ -210,7 +212,7 @@ To exercise a packaged extension rather than the source build, also set `REVIEW_
 
 ### Publishing (maintainer)
 
-Review Comments is a separate extension from [Combine Code in Folder](https://github.com/buimanhtoan-it/combine-code-in-folder). Its Marketplace identity is `ToanBui.review-comments`; do not reuse `combine-code-in-folder` as the package name.
+Review Comments is a separate extension from [Combine Code in Folder](https://github.com/buimanhtoan-it/combine-code-in-folder). Its Marketplace identity is `ToanBui.toanbui-review-comments`; do not reuse `combine-code-in-folder` as the package name.
 
 1. Create `buimanhtoan-it/review-comments` on GitHub if it does not exist, then push this project's source there. The repository, homepage, and issue links in `package.json` target that repository.
 2. Confirm the publisher is `ToanBui` and the version has not already been published. For later releases, update both `package.json` and `package-lock.json`, for example with `npm version patch --no-git-tag-version`.
