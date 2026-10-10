@@ -1,5 +1,7 @@
 # I Review Comments
 
+![I Review Comments extension demo](media/review-comments.gif)
+
 **Review code and documents without changing the source.**
 
 Select a passage, leave a comment, and keep track of what still needs attention. When you are ready to hand off your feedback, copy it with file paths, source excerpts, and replies included.
