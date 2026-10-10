@@ -20,7 +20,7 @@ Once published, install **I Review Comments** (publisher: **ToanBui**) from the 
 code --install-extension ToanBui.toanbui-review-comments;
 ```
 
-Before the Marketplace release, or to try a locally built version, run **Extensions: Install from VSIX…** in the Command Palette and select `toanbui-review-comments-1.0.1.vsix`. Reload the editor if prompted.
+Before the Marketplace release, or to try a locally built version, run **Extensions: Install from VSIX…** in the Command Palette and select `toanbui-review-comments-1.0.2.vsix`. Reload the editor if prompted.
 
 If you installed an earlier local build with the ID `ToanBui.review-comments` or `local-tools.review-comments`, uninstall that build before installing this one, then reload the editor. These builds share command and sidebar IDs and should not run together. Uninstalling the extension does not remove saved threads in your workspace's `.review-comments/` directory.
 
@@ -200,7 +200,7 @@ npm test;
 npm run package;
 ```
 
-`npm run package` compiles the TypeScript source and creates `toanbui-review-comments-1.0.1.vsix`. Only the manifest, README, license, compiled runtime, media, and JSON schemas are included. Source maps, tests, local review data, development settings, and credentials are not part of the package.
+`npm run package` compiles the TypeScript source and creates `toanbui-review-comments-1.0.2.vsix`. Only the manifest, README, license, compiled runtime, media, and JSON schemas are included. Source maps, tests, local review data, development settings, and credentials are not part of the package.
 
 Open this project in VS Code and press **F5** to launch an Extension Development Host. To run the integration suite in a disposable VS Code workspace:
 
